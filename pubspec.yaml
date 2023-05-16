@@ -1,4 +1,4 @@
-name: epic
+name: apod
 description: A sample command-line application.
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
@@ -10,6 +10,7 @@ environment:
 dependencies:
   http: ^0.13.6
   intl: ^0.18.1
+  nyxx: ^5.0.3
   # path: ^1.8.0
 
 dev_dependencies:
