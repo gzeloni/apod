@@ -2,6 +2,7 @@ import 'package:apod/config/config.dart';
 import 'package:apod/apod.dart';
 import 'package:apod/models/log_function.dart';
 import 'package:nyxx/nyxx.dart';
+import 'package:nyxx_commands/nyxx_commands.dart';
 
 void bot() {
   // Create Nyxx bot instance with necessary intents
@@ -12,13 +13,29 @@ void bot() {
           GatewayIntents.messageContent)
     ..registerPlugin(Logging());
 
+  CommandsPlugin commands = CommandsPlugin(
+    prefix: (message) => '>>',
+    options: CommandsOptions(
+      logErrors: true,
+    ),
+  );
+  bot.registerPlugin(commands);
+
   // Listener for when the bot is ready
   bot.eventsWs.onReady.listen((event) {
     print("Ready!");
   });
 
+  final ping = ChatCommand(
+    'ping',
+    'Ping the bot',
+    (IChatContext context) => context.respond(MessageBuilder.content('Pong!')),
+  );
+  commands.addCommand(ping);
+
   bot.eventsWs.onSelfMention.listen((event) async {
     final content = event.message.content;
+    // final words = content.split(' ');
     if (content.startsWith('<')) {
       try {
         await apod();
