@@ -58,7 +58,7 @@ void bot() {
         } catch (e) {
           sendEmbedMessageErrorHandler(e, event, bot);
         }
-        await Future.delayed(Duration(minutes: 10));
+        await Future.delayed(Duration(hours: 12));
       }
     } else {
       try {
