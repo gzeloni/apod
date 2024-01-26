@@ -35,28 +35,30 @@ void bot() {
 
   bot.eventsWs.onSelfMention.listen((event) async {
     final content = event.message.content;
-    // final words = content.split(' ');
     if (content.startsWith('<')) {
-      try {
-        await apod();
-        var randomItem = (apodImages..shuffle()).first;
-        DateTime dateTime = DateTime.parse(randomItem['date']);
-        String? brDateFormat =
-            '${dateTime.day}/${dateTime.month}/${dateTime.year}';
-        await event.message.channel.sendMessage(
-          MessageBuilder.embed(
-            EmbedBuilder(
-              title: randomItem['title'],
-              description:
-                  '${randomItem['description']}\n\nData: $brDateFormat',
-              imageUrl: randomItem['url'],
-              type: randomItem['type'],
+      while (true) {
+        try {
+          await apod();
+          var randomItem = (apodImages..shuffle()).first;
+          DateTime dateTime = DateTime.parse(randomItem['date']);
+          String? brDateFormat =
+              '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+          await event.message.channel.sendMessage(
+            MessageBuilder.embed(
+              EmbedBuilder(
+                title: randomItem['title'],
+                description:
+                    '${randomItem['description']}\n\nData: $brDateFormat',
+                imageUrl: randomItem['url'],
+                type: randomItem['type'],
+              ),
             ),
-          ),
-        );
-        apodImages.clear();
-      } catch (e) {
-        sendEmbedMessageErrorHandler(e, event, bot);
+          );
+          apodImages.clear();
+        } catch (e) {
+          sendEmbedMessageErrorHandler(e, event, bot);
+        }
+        await Future.delayed(Duration(minutes: 10));
       }
     } else {
       try {
